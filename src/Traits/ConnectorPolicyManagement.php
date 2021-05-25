@@ -62,6 +62,9 @@ trait ConnectorPolicyManagement
      */
     private function handleNicknameUpdate(User $profile, IUser $identity)
     {
+        // ASHKRALL: This purposefully breaks nickname overwriting because fuck that shit.
+        return;
+        /*
         $new_nickname = $profile->buildConnectorNickname();
 
         // identity nick is already up-to-date - we have nothing to do here
@@ -76,6 +79,7 @@ trait ConnectorPolicyManagement
                 sprintf('Nickname from the user %s (%s) from group %d has been updated.',
                     '', $identity->getName(), $profile->user->id)));
         }
+        */
     }
 
     /**
@@ -89,8 +93,12 @@ trait ConnectorPolicyManagement
         $pending_drops = collect();
 
         foreach ($sets as $set) {
-            if ($this->terminator || ! $profile->isAllowedSet($set->getId()))
-                $pending_drops->push($set->getId());
+            // ASHKRALL: This ignores all Discord roles that do not start with DOGFT
+            if (strpos($set->getName(), 'DOGFT') === 0) {
+                if ($this->terminator || ! $profile->isAllowedSet($set->getId()))
+                    $pending_drops->push($set->getId());
+                }
+            }
         }
 
         return $pending_drops;
