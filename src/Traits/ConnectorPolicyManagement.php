@@ -94,11 +94,9 @@ trait ConnectorPolicyManagement
 
         foreach ($sets as $set) {
             // ASHKRALL: This ignores all Discord roles that do not start with DOGFT
-            if (strpos($set->getName(), 'DOGFT') === 0) {
+            if (strpos($set->getName(), 'DOGFT') === 0)
                 if ($this->terminator || ! $profile->isAllowedSet($set->getId()))
                     $pending_drops->push($set->getId());
-                }
-            }
         }
 
         return $pending_drops;
